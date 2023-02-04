@@ -1,10 +1,5 @@
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, FC, PropsWithChildren, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
 
 export interface Option {
   readonly label: string;
@@ -13,7 +8,7 @@ export interface Option {
 
 const PeopleContext = createContext<{
   people: readonly Option[];
-  setPeople: React.Dispatch<React.SetStateAction<readonly Option[]>>;
+  setPeople: Dispatch<SetStateAction<readonly Option[]>>;
 }>({
   people: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -40,7 +35,6 @@ export const PeopleProvider: FC<PropsWithChildren> = ({ children }) => {
       value: "babis",
       label: "babis",
     },
-
   ]);
   return (
     <PeopleContext.Provider value={{ people, setPeople }}>

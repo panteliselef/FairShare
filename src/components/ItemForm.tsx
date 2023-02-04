@@ -12,14 +12,16 @@ import type { Option } from "../contexts/PeopleContext";
 import { usePeople } from "../contexts/PeopleContext";
 
 import { Plus } from "react-feather";
-import { FC, useMemo } from "react";
+import type { FC } from "react";
+import { useMemo } from "react";
 
 const ValueContainer = ({
   children,
   ...props
 }: ValueContainerProps<Option>) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [values, input] = children as any;
-  const val = (i: number) => values[i].props.data.label;
+  const val = (i: number) => props.getValue()?.[i]?.label;
 
   return (
     <components.ValueContainer {...props}>
@@ -43,17 +45,14 @@ const ValueContainer = ({
 
 const PayersInput: FC<{ index: number }> = ({ index }) => {
   const { people } = usePeople();
-
-  const { control } = useFormContext();
+  const { control } = useFormContext<FormValues>();
 
   const {
     field: { onChange, value },
-  } = useController({
+  } = useController<FormValues>({
     control,
-    name: `test.${index}.people`,
+    name: `cut.${index}.people`,
   });
-
-  console.log("value", value);
 
   return (
     <div className="w-full shrink-0 grow basis-3/6">
@@ -66,7 +65,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
         components={{
           ValueContainer,
         }}
-        value={value}
+        value={(value || []) as Option[]}
         options={people}
         onChange={onChange}
         styles={{
@@ -79,20 +78,20 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
 
 const Results = () => {
   const { people } = usePeople();
-  const values = useWatch();
+  const values = useWatch<FormValues>();
 
   const peopleMap = useMemo(() => {
-    const _peopleMap = {};
+    const _peopleMap = {} as Record<string, number>;
     people.forEach((a) => (_peopleMap[a.value] = 0));
     console.log("-peopleMap", _peopleMap);
 
-    values.test.map((item) => {
-      item.price;
-      item.people.forEach(
-        (p) => (_peopleMap[p.value] += item.price / item.people.length)
-      );
+    values?.cut?.map((item) => {
+      item?.people?.forEach((p) => {
+        if (p.value)
+          _peopleMap[p.value] +=
+            (item?.price || 0) / (item?.people?.length || 1);
+      });
     });
-
     return _peopleMap;
   }, [values, people]);
   return (
@@ -124,7 +123,10 @@ const Results = () => {
                       {k}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                      {v}
+                      {Intl.NumberFormat(undefined, {
+                        currency: "EUR",
+                        style: "currency",
+                      }).format(v)}
                     </td>
                   </tr>
                 ))}
@@ -137,10 +139,17 @@ const Results = () => {
   );
 };
 
+type FormValues = {
+  cut: {
+    price: number | undefined;
+    people: Option[];
+  }[];
+};
+
 export const ItemForm = () => {
-  const methods = useForm({
+  const methods = useForm<FormValues>({
     defaultValues: {
-      test: [
+      cut: [
         {
           price: 10,
           people: [{ value: "pantelis", label: "pantelis" }],
@@ -152,25 +161,18 @@ export const ItemForm = () => {
   const { register, control, handleSubmit } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "test",
+    name: "cut",
   });
 
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={void handleSubmit((data) => console.log(data))}
         className="flex w-full flex-col gap-4"
       >
         <ul className="flex flex-col gap-4">
           {fields.map((item, index) => (
             <li key={item.id} className="flex items-end gap-4">
-              {/* <input {...register(`test.${index}.firstName`)} />
-            <Controller
-              render={({ field }) => <input {...field} />}
-              name={`test.${index}.lastName`}
-              control={control}
-            /> */}
-
               <div className="w-full  basis-3/6">
                 <label className="mb-2 block text-sm font-medium dark:text-white">
                   Price
@@ -180,7 +182,7 @@ export const ItemForm = () => {
                     type="text"
                     className=" w-full rounded-md border border-gray-200 py-3 px-4 pl-9 pr-16 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400"
                     placeholder="0.00"
-                    {...register(`test.${index}.price`)}
+                    {...register(`cut.${index}.price`)}
                   />
                   <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
                     <span className="text-gray-500">€</span>
@@ -206,12 +208,10 @@ export const ItemForm = () => {
           onClick={() => append({ price: undefined, people: [] })}
         >
           <Plus className="w-4" />
-          Append
+          New Item
         </button>
 
         <Results />
-
-        <button>dad</button>
       </form>
     </FormProvider>
   );
