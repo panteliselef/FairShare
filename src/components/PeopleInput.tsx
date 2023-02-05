@@ -1,7 +1,9 @@
-import React, { KeyboardEventHandler, useId } from "react";
+import type { KeyboardEventHandler } from "react";
+import { useId, useState } from "react";
 
 import CreatableSelect from "react-select/creatable";
 import { usePeople } from "../contexts/PeopleContext";
+import { getRandomColor } from "../utils/colors";
 
 const components = {
   DropdownIndicator: null,
@@ -10,11 +12,12 @@ const components = {
 const createOption = (label: string) => ({
   label,
   value: label,
+  color: getRandomColor(),
 });
 
 export const PeopleInput = () => {
   const id = useId();
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = useState("");
   const { people, setPeople } = usePeople();
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
