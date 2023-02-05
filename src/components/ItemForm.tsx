@@ -118,17 +118,7 @@ const Results = () => {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {Object.entries(peopleMap).map(([k, v]) => (
-                  <tr key={k}>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
-                      {k}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-                      {Intl.NumberFormat(undefined, {
-                        currency: "EUR",
-                        style: "currency",
-                      }).format(v)}
-                    </td>
-                  </tr>
+                  <Row key={k} name={k} price={v} />
                 ))}
               </tbody>
             </table>
@@ -136,6 +126,26 @@ const Results = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Row = ({ name, price }: { name: string; price: number }) => {
+  const priceMemo = useMemo(() => {
+    return Intl.NumberFormat("en-US", {
+      currency: "EUR",
+      style: "currency",
+    }).format(price);
+  }, [price]);
+
+  return (
+    <tr>
+      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
+        {name}
+      </td>
+      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+        {priceMemo}
+      </td>
+    </tr>
   );
 };
 
