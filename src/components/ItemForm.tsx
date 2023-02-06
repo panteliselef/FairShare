@@ -98,25 +98,25 @@ const Results = () => {
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
         <div className="inline-block min-w-full p-1.5 align-middle">
-          <div className="overflow-hidden rounded-lg border shadow dark:border-gray-700 dark:shadow-gray-900">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="overflow-hidden rounded-lg border shadow dark:border-zinc-700 dark:shadow-zinc-900">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
               <thead>
-                <tr className="divide-x divide-gray-200 dark:divide-gray-700">
+                <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
                   >
                     Pay
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
                 {Object.entries(peopleMap).map(([k, v]) => (
                   <Row key={k} name={k} price={v} />
                 ))}
@@ -183,22 +183,22 @@ export const ItemForm = () => {
         <ul className="flex flex-col gap-4">
           {fields.map((item, index) => (
             <li key={item.id} className="flex items-end gap-4">
-              <div className="w-full  basis-3/6">
+              <div className="w-full  basis-1/6">
                 <label className="mb-2 block text-sm font-medium dark:text-white">
                   Price
                 </label>
                 <div className="relative">
                   <input
                     type="text"
-                    className=" w-full rounded-md border border-gray-200 py-3 px-4 pl-9 pr-16 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400"
+                    className="w-full rounded-md border border-gray-200 py-2 px-4 pr-8 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
                     placeholder="0.00"
                     {...register(`cut.${index}.price`)}
                   />
-                  <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
-                    <span className="text-gray-500">€</span>
-                  </div>
+                  {/* <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
+                    <span className="text-zinc-500">€</span>
+                  </div> */}
                   <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
-                    <span className="text-gray-500">EUR</span>
+                    <span className="text-zinc-500">€</span>
                   </div>
                 </div>
               </div>
@@ -212,14 +212,17 @@ export const ItemForm = () => {
           ))}
         </ul>
 
-        <button
-          type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-md border border-transparent py-2 px-3 text-sm font-semibold text-blue-500 transition-all hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          onClick={() => append({ price: undefined, people: [] })}
-        >
-          <Plus className="w-4" />
-          New Item
-        </button>
+        <div className="flex flex-row-reverse w-full">
+          <button
+            type="button"
+            className="grow lg:grow-0 inline-flex items-center justify-center gap-2 rounded-md border border-transparent py-2 px-3 text-sm font-semibold text-blue-500 transition-all hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            onClick={() => append({ price: undefined, people: [] })}
+          >
+            <Plus className="w-4" />
+            New Item
+          </button>
+
+        </div>
 
         <Results />
       </form>
