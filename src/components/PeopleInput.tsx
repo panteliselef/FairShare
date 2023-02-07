@@ -1,8 +1,12 @@
 import clx from "classnames";
 import type { KeyboardEventHandler } from "react";
 import { useId, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import type { MultiValue } from "react-select";
 
 import CreatableSelect from "react-select/creatable";
+import type { FormValues } from "../contexts/Form";
+import type { Option } from "../contexts/PeopleContext";
 import { usePeople } from "../contexts/PeopleContext";
 import { getRandomColor } from "../utils/colors";
 
@@ -21,6 +25,8 @@ export const PeopleInput = () => {
   const [inputValue, setInputValue] = useState("");
   const { people, setPeople } = usePeople();
 
+  const { setValue, getValues } = useFormContext<FormValues>();
+
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return;
     switch (event.key) {
@@ -30,6 +36,31 @@ export const PeopleInput = () => {
         setInputValue("");
         event.preventDefault();
     }
+  };
+
+  const onChange = (newValue: MultiValue<Option>) => {
+    /**
+     * In case we remove a person from `people` array
+     * also delete them from the form
+     */
+    function removePeopleFromForm() {
+      const items = getValues("cut");
+      items.forEach(({ people: itemPeople }, index) => {
+        const v = itemPeople || [];
+        const filtered = v.filter((item) =>
+          newValue.map((a) => a.value).includes(item.value)
+        );
+        setValue(`cut.${index}.people`, filtered);
+      });
+    }
+
+    // perform actual update for people
+    setPeople((old) => {
+      if (old.length > newValue.length) {
+        removePeopleFromForm();
+      }
+      return newValue;
+    });
   };
 
   return (
@@ -59,7 +90,7 @@ export const PeopleInput = () => {
       isClearable
       isMulti
       menuIsOpen={false}
-      onChange={(newValue) => setPeople(newValue)}
+      onChange={onChange}
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
       placeholder="Type your pal's name and press enter..."
