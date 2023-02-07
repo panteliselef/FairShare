@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { PeopleInput } from "../components";
 import { ItemForm } from "../components/ItemForm";
+import { FormProvider } from "../contexts/Form";
 import { PeopleProvider } from "../contexts/PeopleContext";
 
 const Home: NextPage = () => {
@@ -13,15 +14,20 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-white dark:bg-black">
-        <div className="max-w-2xl container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <div className="container flex max-w-2xl flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col self-start">
             <h1 className="m-0 text-5xl font-extrabold tracking-tight text-black dark:text-white sm:text-[5rem]">
-              Fair<span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-500 to-purple-600">Share</span>
+              Fair
+              <span className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                Share
+              </span>
             </h1>
           </div>
           <PeopleProvider>
-            <PeopleInput />
-            <ItemForm />
+            <FormProvider>
+              <PeopleInput />
+              <ItemForm />
+            </FormProvider>
           </PeopleProvider>
         </div>
       </main>

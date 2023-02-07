@@ -1,8 +1,6 @@
 import {
-  FormProvider,
   useController,
   useFieldArray,
-  useForm,
   useFormContext,
   useWatch,
 } from "react-hook-form";
@@ -12,8 +10,9 @@ import type { Option } from "../contexts/PeopleContext";
 import { usePeople } from "../contexts/PeopleContext";
 
 import { Plus } from "react-feather";
-import type { FC } from "react";
+import { type FC, useEffect } from "react";
 import { useMemo } from "react";
+import type { FormValues } from "../contexts/Form";
 
 const ValueContainer = ({
   children,
@@ -83,17 +82,19 @@ const Results = () => {
   const peopleMap = useMemo(() => {
     const _peopleMap = {} as Record<string, number>;
     people.forEach((a) => (_peopleMap[a.value] = 0));
-    console.log("-peopleMap", _peopleMap);
 
     values?.cut?.map((item) => {
       item?.people?.forEach((p) => {
-        if (p.value)
+        if (p.value) {
           _peopleMap[p.value] +=
             (item?.price || 0) / (item?.people?.length || 1);
+        }
       });
     });
+
     return _peopleMap;
   }, [values, people]);
+
   return (
     <div className="flex flex-col">
       <div className="-m-1.5 overflow-x-auto">
@@ -149,83 +150,63 @@ const Row = ({ name, price }: { name: string; price: number }) => {
   );
 };
 
-type FormValues = {
-  cut: {
-    price: number | undefined;
-    people: Option[];
-  }[];
-};
-
 export const ItemForm = () => {
-  const methods = useForm<FormValues>({
-    defaultValues: {
-      cut: [
-        {
-          price: 10,
-          people: [{ value: "pantelis", label: "pantelis" }],
-        },
-      ],
-    },
-  });
+  const { control, handleSubmit, register } = useFormContext<FormValues>();
 
-  const { register, control, handleSubmit } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cut",
   });
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={void handleSubmit((data) => console.log(data))}
-        className="flex w-full flex-col gap-4"
-      >
-        <ul className="flex flex-col gap-4">
-          {fields.map((item, index) => (
-            <li key={item.id} className="flex items-end gap-4">
-              <div className="w-full  basis-1/6">
-                <label className="mb-2 block text-sm font-medium dark:text-white">
-                  Price
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    className="w-full rounded-md border border-gray-200 py-2 px-4 pr-8 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
-                    placeholder="0.00"
-                    {...register(`cut.${index}.price`)}
-                  />
-                  {/* <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
+    <form
+      onSubmit={void handleSubmit((data) => console.log(data))}
+      className="flex w-full flex-col gap-4"
+    >
+      <ul className="flex flex-col gap-4">
+        {fields.map((item, index) => (
+          <li key={item.id} className="flex items-end gap-4">
+            <div className="w-full  basis-1/6">
+              <label className="mb-2 block text-sm font-medium dark:text-white">
+                Price
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full rounded-md border border-gray-200 py-2 px-4 pr-8 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+                  placeholder="0.00"
+                  {...register(`cut.${index}.price`)}
+                />
+                {/* <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
                     <span className="text-zinc-500">€</span>
                   </div> */}
-                  <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
-                    <span className="text-zinc-500">€</span>
-                  </div>
+                <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
+                  <span className="text-zinc-500">€</span>
                 </div>
               </div>
+            </div>
 
-              <PayersInput index={index} />
+            <PayersInput index={index} />
 
-              <button type="button" onClick={() => remove(index)}>
-                x
-              </button>
-            </li>
-          ))}
-        </ul>
+            <button type="button" onClick={() => remove(index)}>
+              x
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <div className="flex flex-row-reverse w-full">
-          <button
-            type="button"
-            className="grow lg:grow-0 inline-flex items-center justify-center gap-2 rounded-md border border-transparent py-2 px-3 text-sm font-semibold text-blue-500 transition-all hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            onClick={() => append({ price: undefined, people: [] })}
-          >
-            <Plus className="w-4" />
-            New Item
-          </button>
+      <div className="flex w-full flex-row-reverse">
+        <button
+          type="button"
+          className="inline-flex grow items-center justify-center gap-2 rounded-md border border-transparent py-2 px-3 text-sm font-semibold text-blue-500 transition-all hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 lg:grow-0"
+          onClick={() => append({ price: undefined, people: [] })}
+        >
+          <Plus className="w-4" />
+          New Item
+        </button>
+      </div>
 
-        </div>
-
-        <Results />
-      </form>
-    </FormProvider>
+      <Results />
+    </form>
   );
 };
