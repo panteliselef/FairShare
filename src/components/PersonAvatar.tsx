@@ -1,14 +1,29 @@
 import Avatar from "boring-avatars";
+import classNames from "classnames";
 import type { Option } from "../contexts/PeopleContext";
+import { AVATARCOLORS } from "../utils/colors";
 
-const PersonAvatar = ({ person }: { person: Option }) => {
-  console.log(person);
+const PersonAvatar = ({
+  person,
+  size = 32,
+  withBorder = false,
+}: {
+  person: Option;
+  withBorder?: boolean;
+  size?: number;
+}) => {
   return (
-    <div className="relative">
-      <Avatar size={32} variant="marble" colors={person.avatarColors} />
-      <span className="absolute inset-0 flex h-full w-full items-center justify-center text-base font-bold capitalize leading-none text-white">
-        {person.value.slice(0, 1)}
-      </span>
+    <div
+      className={classNames("relative", {
+        "rounded-full border": withBorder,
+      })}
+    >
+      <Avatar
+        size={size}
+        variant="beam"
+        name={person.value}
+        colors={[...AVATARCOLORS]}
+      />
     </div>
   );
 };
