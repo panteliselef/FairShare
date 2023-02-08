@@ -4,15 +4,21 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import type { ValueContainerProps } from "react-select";
+import type {
+  ControlProps,
+  GroupBase,
+  ValueContainerProps,
+} from "react-select";
 import Select, { components } from "react-select";
 import type { Option } from "../contexts/PeopleContext";
 import { usePeople } from "../contexts/PeopleContext";
 
-import { Plus } from "react-feather";
-import { type FC, useEffect } from "react";
+import { Plus, Trash2 } from "react-feather";
 import { useMemo } from "react";
+import type { FC } from "react";
 import type { FormValues } from "../contexts/Form";
+import clx from "classnames";
+import PersonAvatar from "./PersonAvatar";
 
 const ValueContainer = ({
   children,
@@ -20,21 +26,13 @@ const ValueContainer = ({
 }: ValueContainerProps<Option>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [values, input] = children as any;
-  const val = (i: number) => props.getValue()?.[i]?.label;
 
   return (
     <components.ValueContainer {...props}>
       {/* {values} */}
       {Array.isArray(values) &&
-        values.map((v, index) => (
-          <span
-            key={index}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-600"
-          >
-            <span className="text-xs font-medium leading-none text-white">
-              {(val(index) as string).slice(0, 2)}
-            </span>
-          </span>
+        values.map((_, i) => (
+          <PersonAvatar key={i} person={props.getValue()[i]!} />
         ))}
 
       {input}
@@ -54,8 +52,8 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
   });
 
   return (
-    <div className="w-full shrink-0 grow basis-3/6">
-      <label className="mb-2 block text-sm font-medium dark:text-white">
+    <div className="h-full w-full shrink-0 grow basis-3/6">
+      <label className="mb-2 block border-gray-200 bg-zinc-900 bg-transparent text-sm font-medium dark:text-white">
         People
       </label>
       <Select
@@ -67,8 +65,31 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
         value={(value || []) as Option[]}
         options={people}
         onChange={onChange}
-        styles={{
-          control: (base) => ({ ...base, minHeight: "46px" }),
+        unstyled
+        classNames={{
+          container: () => clx("h-12"),
+          control: (state: ControlProps<Option, true, GroupBase<Option>>) =>
+            clx(
+              state.isFocused
+                ? "border-black dark:border-white"
+                : "border-gray-200 dark:border-zinc-700",
+              "w-full h-full rounded-md border-2 border-gray-200 pl-2  text-sm font-medium dark:bg-zinc-900 dark:text-white"
+            ),
+          indicatorsContainer: () => clx("text-zinc-900 dark:text-gray-200"),
+          clearIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
+          dropdownIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
+          indicatorSeparator: () =>
+            clx("bg-gray-200 dark:bg-zinc-700 px-[1px]"),
+
+          valueContainer: () => clx("h-full flex gap-2"),
+          menuList: () =>
+            clx(
+              "mt-2 border border-gray-100 bg-white overflow-hidden rounded-md py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            ),
+          option: () =>
+            clx(
+              "py-1 px-3 hover:bg-gray-100 hover:dark:bg-zinc-800 focus:dark:bg-zinc-800"
+            ),
         }}
       />
     </div>
@@ -105,13 +126,13 @@ const Results = () => {
                 <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
+                    className="w-3/5 px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
+                    className="w-2/5 px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
                   >
                     Pay
                   </th>
@@ -165,21 +186,18 @@ export const ItemForm = () => {
     >
       <ul className="flex flex-col gap-4">
         {fields.map((item, index) => (
-          <li key={item.id} className="flex items-end gap-4">
-            <div className="w-full  basis-1/6">
+          <li key={item.id} className="flex h-full items-end gap-3">
+            <div className="w-full basis-3/12">
               <label className="mb-2 block text-sm font-medium dark:text-white">
                 Price
               </label>
               <div className="relative">
                 <input
                   type="text"
-                  className="w-full rounded-md border border-gray-200 py-2 px-4 pr-8 text-sm shadow-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+                  className="h-12 w-full rounded-md border-2 border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
                   placeholder="0.00"
                   {...register(`cut.${index}.price`)}
                 />
-                {/* <div className="pointer-events-none absolute inset-y-0 left-0 z-20 flex items-center pl-4">
-                    <span className="text-zinc-500">€</span>
-                  </div> */}
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
                   <span className="text-zinc-500">€</span>
                 </div>
@@ -188,8 +206,12 @@ export const ItemForm = () => {
 
             <PayersInput index={index} />
 
-            <button type="button" onClick={() => remove(index)}>
-              x
+            <button
+              className="h-12 rounded-md bg-red-600 px-1 text-white saturate-[75%] focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+              type="button"
+              onClick={() => remove(index)}
+            >
+              <Trash2 width={20} />
             </button>
           </li>
         ))}
