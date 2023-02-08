@@ -29,13 +29,16 @@ const ValueContainer = ({
 
   return (
     <components.ValueContainer {...props}>
-      {/* {values} */}
-      {Array.isArray(values) &&
-        values.map((_, i) => (
-          <PersonAvatar key={i} person={props.getValue()[i]!} />
-        ))}
+      <div className="flex w-full">
+        <div className="flex h-full -space-x-3 overflow-auto">
+          {Array.isArray(values) &&
+            values.map((_, i) => (
+              <PersonAvatar key={i} withBorder={true} person={props.getValue()[i]!} />
+            ))}
+        </div>
 
-      {input}
+        {input}
+      </div>
     </components.ValueContainer>
   );
 };
@@ -65,23 +68,21 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
         value={(value || []) as Option[]}
         options={people}
         onChange={onChange}
+        isSearchable={false}
         unstyled
         classNames={{
-          container: () => clx("h-12"),
+          container: () => clx("min-h-[48px] flex flex-col"),
           control: (state: ControlProps<Option, true, GroupBase<Option>>) =>
             clx(
               state.isFocused
                 ? "border-black dark:border-white"
                 : "border-gray-200 dark:border-zinc-700",
-              "w-full h-full rounded-md border-2 border-gray-200 pl-2  text-sm font-medium dark:bg-zinc-900 dark:text-white"
+              "grow w-full h-full rounded-md border border-gray-200 pl-2 text-sm font-medium dark:bg-zinc-900 dark:text-white"
             ),
           indicatorsContainer: () => clx("text-zinc-900 dark:text-gray-200"),
           clearIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
           dropdownIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
-          indicatorSeparator: () =>
-            clx("bg-gray-200 dark:bg-zinc-700 px-[1px]"),
-
-          valueContainer: () => clx("h-full flex gap-2"),
+          indicatorSeparator: () => clx("bg-gray-200 dark:bg-zinc-700"),
           menuList: () =>
             clx(
               "mt-2 border border-gray-100 bg-white overflow-hidden rounded-md py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
@@ -126,13 +127,13 @@ const Results = () => {
                 <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
                   <th
                     scope="col"
-                    className="w-3/5 px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
+                    className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="w-2/5 px-6 py-3 text-left text-xs font-medium uppercase text-zinc-500"
+                    className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500"
                   >
                     Pay
                   </th>
@@ -194,7 +195,7 @@ export const ItemForm = () => {
               <div className="relative">
                 <input
                   type="text"
-                  className="h-12 w-full rounded-md border-2 border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
+                  className="h-12 w-full rounded-md border border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
                   placeholder="0.00"
                   {...register(`cut.${index}.price`)}
                 />
