@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "boring-avatars": "^1.7.0",
     "classnames": "^2.3.2",
     "color-hash": "^2.0.2",
     "next": "13.1.6",

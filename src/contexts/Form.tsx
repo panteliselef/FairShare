@@ -14,8 +14,8 @@ export const FormProvider: FC<PropsWithChildren> = ({ children }) => {
     defaultValues: {
       cut: [
         {
-          price: 10,
-          people: [{ value: "pantelis", label: "pantelis" }],
+          price: undefined,
+          people: [],
         },
       ],
     },
