@@ -1,9 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { PeopleInput } from "../components";
-import { ItemForm } from "../components/ItemForm";
-import { FormProvider } from "../contexts/Form";
-import { PeopleProvider } from "../contexts/PeopleContext";
+
+import { ItemForm, PeopleInput } from "@components/index";
+import { FormProvider } from "@contexts/Form";
+import { PeopleProvider } from "@contexts/PeopleContext";
 
 const Home: NextPage = () => {
   return (

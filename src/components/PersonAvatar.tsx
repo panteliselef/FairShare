@@ -1,7 +1,8 @@
 import Avatar from "boring-avatars";
 import classNames from "classnames";
-import type { Option } from "../contexts/PeopleContext";
-import { AVATARCOLORS } from "../utils/colors";
+
+import { AVATARCOLORS } from "@utils/colors";
+import type { Option } from "@models/option";
 
 const PersonAvatar = ({
   person,
