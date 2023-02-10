@@ -1,29 +1,19 @@
-import {
-  useController,
-  useFieldArray,
-  useFormContext,
-  useWatch,
-} from "react-hook-form";
-import type {
-  ControlProps,
-  GroupBase,
-  ValueContainerProps,
-} from "react-select";
+import { useController, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import Select, { components } from "react-select";
-import type { Option } from "../contexts/PeopleContext";
-import { usePeople } from "../contexts/PeopleContext";
-
 import { Plus, Trash2 } from "react-feather";
 import { useMemo } from "react";
-import type { FC } from "react";
-import type { FormValues } from "../contexts/Form";
 import clx from "classnames";
-import PersonAvatar from "./PersonAvatar";
 
-const ValueContainer = ({
-  children,
-  ...props
-}: ValueContainerProps<Option>) => {
+import PersonAvatar from "@components/PersonAvatar";
+
+import type { ControlProps, GroupBase, ValueContainerProps } from "react-select";
+import type { FC } from "react";
+import type { Item } from "@models/item";
+import type { Option } from "@models/option";
+import { usePeople } from "@contexts/PeopleContext";
+import { useCurrency, useWithCurrency } from "@hooks/useCurrency";
+
+const ValueContainer = ({ children, ...props }: ValueContainerProps<Option>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [values, input] = children as any;
 
@@ -32,9 +22,7 @@ const ValueContainer = ({
       <div className="flex w-full">
         <div className="flex h-full -space-x-3 overflow-auto">
           {Array.isArray(values) &&
-            values.map((_, i) => (
-              <PersonAvatar key={i} withBorder={true} person={props.getValue()[i]!} />
-            ))}
+            values.map((_, i) => <PersonAvatar key={i} withBorder={true} person={props.getValue()[i]!} />)}
         </div>
 
         {input}
@@ -45,11 +33,11 @@ const ValueContainer = ({
 
 const PayersInput: FC<{ index: number }> = ({ index }) => {
   const { people } = usePeople();
-  const { control } = useFormContext<FormValues>();
+  const { control } = useFormContext<Item>();
 
   const {
     field: { onChange, value },
-  } = useController<FormValues>({
+  } = useController<Item>({
     control,
     name: `cut.${index}.people`,
   });
@@ -74,9 +62,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
           container: () => clx("min-h-[48px] flex flex-col"),
           control: (state: ControlProps<Option, true, GroupBase<Option>>) =>
             clx(
-              state.isFocused
-                ? "border-black dark:border-white"
-                : "border-gray-200 dark:border-zinc-700",
+              state.isFocused ? "border-black dark:border-white" : "border-gray-200 dark:border-zinc-700",
               "grow w-full h-full rounded-md border border-gray-200 pl-2 text-sm font-medium dark:bg-zinc-900 dark:text-white"
             ),
           indicatorsContainer: () => clx("text-zinc-900 dark:text-gray-200"),
@@ -87,10 +73,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
             clx(
               "mt-2 border border-gray-100 bg-white overflow-hidden rounded-md py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
             ),
-          option: () =>
-            clx(
-              "py-1 px-3 hover:bg-gray-100 hover:dark:bg-zinc-800 focus:dark:bg-zinc-800"
-            ),
+          option: () => clx("py-1 px-3 hover:bg-gray-100 hover:dark:bg-zinc-800 focus:dark:bg-zinc-800"),
         }}
       />
     </div>
@@ -99,7 +82,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
 
 const Results = () => {
   const { people } = usePeople();
-  const values = useWatch<FormValues>();
+  const values = useWatch<Item>();
 
   const peopleMap = useMemo(() => {
     const _peopleMap = {} as Record<string, number>;
@@ -108,8 +91,7 @@ const Results = () => {
     values?.cut?.map((item) => {
       item?.people?.forEach((p) => {
         if (p.value) {
-          _peopleMap[p.value] +=
-            (item?.price || 0) / (item?.people?.length || 1);
+          _peopleMap[p.value] += (item?.price || 0) / (item?.people?.length || 1);
         }
       });
     });
@@ -125,16 +107,10 @@ const Results = () => {
             <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
               <thead>
                 <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
-                  <th
-                    scope="col"
-                    className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500"
-                  >
+                  <th scope="col" className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
                     Name
                   </th>
-                  <th
-                    scope="col"
-                    className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500"
-                  >
+                  <th scope="col" className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
                     Pay
                   </th>
                 </tr>
@@ -153,45 +129,33 @@ const Results = () => {
 };
 
 const Row = ({ name, price }: { name: string; price: number }) => {
-  const priceMemo = useMemo(() => {
-    return Intl.NumberFormat("en-US", {
-      currency: "EUR",
-      style: "currency",
-    }).format(price);
-  }, [price]);
+  const fmtPrice = useWithCurrency(price);
 
   return (
     <tr>
-      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">
-        {name}
-      </td>
-      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
-        {priceMemo}
-      </td>
+      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">{name}</td>
+      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{fmtPrice}</td>
     </tr>
   );
 };
 
 export const ItemForm = () => {
-  const { control, handleSubmit, register } = useFormContext<FormValues>();
+  const { control, handleSubmit, register } = useFormContext<Item>();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cut",
   });
 
+  const { currencySymbol } = useCurrency();
+
   return (
-    <form
-      onSubmit={void handleSubmit((data) => console.log(data))}
-      className="flex w-full flex-col gap-4"
-    >
+    <form onSubmit={void handleSubmit((data) => console.log(data))} className="flex w-full flex-col gap-4">
       <ul className="flex flex-col gap-4">
         {fields.map((item, index) => (
           <li key={item.id} className="flex h-full items-end gap-3">
             <div className="w-full basis-3/12">
-              <label className="mb-2 block text-sm font-medium dark:text-white">
-                Price
-              </label>
+              <label className="mb-2 block text-sm font-medium dark:text-white">Price</label>
               <div className="relative">
                 <input
                   type="text"
@@ -200,7 +164,7 @@ export const ItemForm = () => {
                   {...register(`cut.${index}.price`)}
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
-                  <span className="text-zinc-500">€</span>
+                  <span className="text-zinc-500">{currencySymbol}</span>
                 </div>
               </div>
             </div>

@@ -1,15 +1,12 @@
+import { createContext, useContext } from "react";
+import { usePeopleLocalStorage } from "@hooks/usePeopleLocalStorage";
+
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from "react";
-
-import { createContext, useContext, useState } from "react";
-
-export interface Option {
-  readonly label: string;
-  readonly value: string;
-}
+import type { Option } from "@models/option";
 
 const PeopleContext = createContext<{
-  people: readonly Option[];
-  setPeople: Dispatch<SetStateAction<readonly Option[]>>;
+  people: Option[];
+  setPeople: Dispatch<SetStateAction<Option[]>>;
 }>({
   people: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -19,24 +16,8 @@ const PeopleContext = createContext<{
 export const usePeople = () => useContext(PeopleContext);
 
 export const PeopleProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [people, setPeople] = useState<readonly Option[]>([
-    {
-      value: "pantelis",
-      label: "pantelis",
-    },
-    {
-      value: "john",
-      label: "john",
-    },
-    {
-      value: "dimitris",
-      label: "dimitris",
-    },
-    {
-      value: "babis",
-      label: "babis",
-    },
-  ]);
+  const { people, setPeople } = usePeopleLocalStorage();
+
   return (
     <PeopleContext.Provider value={{ people, setPeople }}>
       {children}

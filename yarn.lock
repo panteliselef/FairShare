@@ -210,6 +210,11 @@
   dependencies:
     glob "7.1.7"
 
+"@next/font@^13.1.6":
+  version "13.1.6"
+  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.1.6.tgz#2bf99e3321ec9b4d65781c0d0ebff072e8752e1a"
+  integrity sha512-AITjmeb1RgX1HKMCiA39ztx2mxeAyxl4ljv2UoSBUGAbFFMg8MO7YAvjHCgFhD39hL7YTbFjol04e/BPBH5RzQ==
+
 "@next/swc-android-arm-eabi@13.1.6":
   version "13.1.6"
   resolved "https://registry.yarnpkg.com/@next/swc-android-arm-eabi/-/swc-android-arm-eabi-13.1.6.tgz#d766dfc10e27814d947b20f052067c239913dbcc"
@@ -799,6 +804,16 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+countries-and-timezones@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/countries-and-timezones/-/countries-and-timezones-3.4.1.tgz#0ec2540f57e42f0f740eb2acaede786043347fe1"
+  integrity sha512-INeHGCony4XUUR8iGL/lmt9s1Oi+n+gFHeJAMfbV5hJfYeDOB8JG1oxz5xFQu5oBZoRCJe/87k1Vzue9DoIauA==
+
+country-to-currency@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/country-to-currency/-/country-to-currency-1.0.7.tgz#93dad8e8e0fa129a4a3c3de0f8d8f189cf3cf0c2"
+  integrity sha512-VkLjDXDlelwng8MdcsPy7D28r86TLBQcpHYxXNz+RFgFp2VT3PAEb3utaqC1SuvQQOsGfWll42lAVdS42ThtLg==
 
 cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
