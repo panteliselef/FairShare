@@ -92,6 +92,7 @@ export const PeopleInput = () => {
     <div className="flex w-full flex-col gap-2">
       <CreatableSelect
         id={id}
+        instanceId={id}
         className="h-full w-full"
         unstyled
         classNames={{

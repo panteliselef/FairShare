@@ -47,6 +47,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
         People
       </label>
       <Select
+        instanceId="payers-input"
         isMulti
         name="colors"
         components={{

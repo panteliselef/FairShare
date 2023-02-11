@@ -7,7 +7,7 @@ export const ThemeSwitch = () => {
 
   return (
     <label className={clx(styles.switch)}>
-      <input type="checkbox" onClick={() => toggleTheme()} checked={theme === "light"} />
+      <input type="checkbox" onChange={() => toggleTheme()} checked={theme === "light"} />
       <span className={clx(styles.slider)} />
     </label>
   );
