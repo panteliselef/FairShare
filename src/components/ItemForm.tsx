@@ -158,10 +158,14 @@ export const ItemForm = () => {
               <label className="mb-2 block text-sm font-medium dark:text-white">Price</label>
               <div className="relative">
                 <input
-                  type="text"
+                  type="number"
+                  pattern="\d*"
+                  inputMode="decimal"
                   className="h-12 w-full rounded-md border border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
                   placeholder="0.00"
-                  {...register(`cut.${index}.price`)}
+                  {...register(`cut.${index}.price`, {
+                    valueAsNumber: true
+                  })}
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
                   <span className="text-zinc-500">{currencySymbol}</span>
