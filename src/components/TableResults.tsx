@@ -31,7 +31,7 @@ export const TableResults = () => {
   if (!peopleExist) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center p-1.5">
-        <NoDataIllustration className="mb-2 w-20 fill-gray-100 dark:fill-zinc-600" />
+        <NoDataIllustration className="mb-2 w-20 fill-gray-200 dark:fill-zinc-700" />
         <h2 className="mb-1 text-base font-medium text-zinc-900 dark:text-white">No people added</h2>
         <p className="text-sm text-zinc-500">Add names to view the results</p>
       </div>
