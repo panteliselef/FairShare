@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import clx from "classnames";
 
-import { ItemForm, PeopleInput, ThemeSwitch } from "@components/index";
+import { ItemForm, PeopleInput, ThemeSwitch, TableResults } from "@components/index";
 import { FormProvider } from "@contexts/Form";
 import { PeopleProvider } from "@contexts/PeopleContext";
 import { useTheme } from "@contexts/ThemeContext";
@@ -41,6 +41,7 @@ const Home: NextPage = () => {
             <FormProvider>
               <PeopleInput />
               <ItemForm />
+              <TableResults />
             </FormProvider>
           </PeopleProvider>
         </div>
