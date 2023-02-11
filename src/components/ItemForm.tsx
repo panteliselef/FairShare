@@ -1,7 +1,6 @@
-import { useController, useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { useController, useFieldArray, useFormContext } from "react-hook-form";
 import Select, { components } from "react-select";
 import { Plus, Trash2 } from "react-feather";
-import { useMemo } from "react";
 import clx from "classnames";
 
 import PersonAvatar from "@components/PersonAvatar";
@@ -11,7 +10,7 @@ import type { FC } from "react";
 import type { Item } from "@models/item";
 import type { Option } from "@models/option";
 import { usePeople } from "@contexts/PeopleContext";
-import { useCurrency, useWithCurrency } from "@hooks/useCurrency";
+import { useCurrency } from "@hooks/useCurrency";
 
 const ValueContainer = ({ children, ...props }: ValueContainerProps<Option>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -80,65 +79,6 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
   );
 };
 
-const Results = () => {
-  const { people } = usePeople();
-  const values = useWatch<Item>();
-
-  const peopleMap = useMemo(() => {
-    const _peopleMap = {} as Record<string, number>;
-    people.forEach((a) => (_peopleMap[a.value] = 0));
-
-    values?.cut?.map((item) => {
-      item?.people?.forEach((p) => {
-        if (p.value) {
-          _peopleMap[p.value] += (item?.price || 0) / (item?.people?.length || 1);
-        }
-      });
-    });
-
-    return _peopleMap;
-  }, [values, people]);
-
-  return (
-    <div className="flex flex-col">
-      <div className="-m-1.5 overflow-x-auto">
-        <div className="inline-block min-w-full p-1.5 align-middle">
-          <div className="overflow-hidden rounded-lg border shadow dark:border-zinc-700 dark:shadow-zinc-900">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
-              <thead>
-                <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
-                  <th scope="col" className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
-                    Name
-                  </th>
-                  <th scope="col" className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
-                    Pay
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
-                {Object.entries(peopleMap).map(([k, v]) => (
-                  <Row key={k} name={k} price={v} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Row = ({ name, price }: { name: string; price: number }) => {
-  const fmtPrice = useWithCurrency(price);
-
-  return (
-    <tr>
-      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">{name}</td>
-      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{fmtPrice}</td>
-    </tr>
-  );
-};
-
 export const ItemForm = () => {
   const { control, handleSubmit, register } = useFormContext<Item>();
 
@@ -164,7 +104,7 @@ export const ItemForm = () => {
                   className="h-12 w-full rounded-md border border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
                   placeholder="0.00"
                   {...register(`cut.${index}.price`, {
-                    valueAsNumber: true
+                    valueAsNumber: true,
                   })}
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
@@ -196,8 +136,6 @@ export const ItemForm = () => {
           New Item
         </button>
       </div>
-
-      <Results />
     </form>
   );
 };
