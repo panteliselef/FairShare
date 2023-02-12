@@ -82,7 +82,12 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
 };
 
 export const ItemForm = () => {
-  const { control, handleSubmit, register, formState: { errors } } = useFormContext<Item>();
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useFormContext<Item>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -102,19 +107,23 @@ export const ItemForm = () => {
                 <input
                   type="text"
                   inputMode="decimal"
-                  className={classNames(`h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium  focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`, {
-                    'border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ': !(errors?.cut?.[index]?.price?.message),
-                    'border-red-500 focus:border-red-600': (errors?.cut?.[index]?.price?.message)
-                  })}
+                  className={classNames(
+                    `h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium  focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`,
+                    {
+                      "border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ":
+                        !errors?.cut?.[index]?.price?.message,
+                      "border-red-500 focus:border-red-600": errors?.cut?.[index]?.price?.message,
+                    }
+                  )}
                   placeholder="0.00"
                   {...register(`cut.${index}.price`, {
                     validate(v) {
-                      if (typeof v === 'undefined' || isNaN(v)) return 'Invalid number'
-                      return true
+                      if (typeof v === "undefined" || isNaN(v)) return "Invalid number";
+                      return true;
                     },
                     setValueAs(value) {
-                      if (typeof value === 'number') return value;
-                      return Number((value as string)?.replaceAll(',', '.'))
+                      if (typeof value === "number") return value;
+                      return Number((value as string)?.replaceAll(",", "."));
                     },
                   })}
                 />
@@ -127,11 +136,11 @@ export const ItemForm = () => {
             <PayersInput index={index} />
 
             <button
-              className="h-12 rounded-md bg-red-600 px-1 text-white saturate-[75%] focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+              className="h-12 rounded-md border border-transparent px-1 text-white transition-all hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
               type="button"
               onClick={() => remove(index)}
             >
-              <Trash2 width={20} />
+              <Trash2 width={20} className="text-red-600" />
             </button>
           </li>
         ))}
@@ -140,7 +149,12 @@ export const ItemForm = () => {
       <div className="flex w-full flex-row-reverse">
         <button
           type="button"
-          className="inline-flex grow items-center justify-center gap-2 rounded-md border border-transparent py-2 px-3 text-sm font-semibold text-blue-500 transition-all hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 lg:grow-0"
+          className={classNames([
+            `inline-flex grow items-center justify-center gap-2 rounded-md py-2 px-3 transition-all lg:grow-0`,
+            `text-sm font-medium`,
+            `border border-black bg-black text-white hover:bg-white hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white`,
+            `focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 dark:focus:ring-white`,
+          ])}
           onClick={() => append({ price: undefined, people: [] })}
         >
           <Plus className="w-4" />
