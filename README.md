@@ -1,28 +1,10 @@
-# Create T3 App
+# FairShare
+<img src="https://user-images.githubusercontent.com/19269911/218335902-53564cc0-45b3-4390-ac06-88bd23925342.png" width="100" height="100">
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Visit [FairShare](https://fairshare.vercel.app/) and split your bill with ease.
 
-## What's next? How do I make an app with this?
+FairShare is a handy and innovative app designed for people who enjoy eating out with friends and want to simplify the process of splitting the bill.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+With FairShare, gone are the days of calculating the costs of each item and trying to figure out who owes what. The app calculates the total bill and then splits it evenly between all participants, taking into account any specific items they ordered.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+The end result is a quick, accurate, and fair distribution of costs, so you can get back to what really matters – enjoying your time with friends. Whether you're at a restaurant, coffee shop, or any other establishment that requires splitting the bill, FairShare is the ultimate solution.
