@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { AVATARCOLORS } from "@utils/colors";
 import type { Option } from "@models/option";
 
-const PersonAvatar = ({
+export const PersonAvatar = ({
   person,
   size = 32,
   withBorder = false,
@@ -28,5 +28,3 @@ const PersonAvatar = ({
     </div>
   );
 };
-
-export default PersonAvatar;

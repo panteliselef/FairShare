@@ -20,6 +20,7 @@
     "react-dom": "18.2.0",
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.43.0",
+    "react-hook-form-persist": "^3.0.0",
     "react-select": "^5.7.0",
     "zod": "^3.20.2"
   },
