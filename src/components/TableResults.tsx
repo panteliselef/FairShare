@@ -46,10 +46,10 @@ export const TableResults = () => {
             <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
               <thead>
                 <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
-                  <th scope="col" className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
+                  <th scope="col" className="w-3/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-400">
                     Name
                   </th>
-                  <th scope="col" className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-500">
+                  <th scope="col" className="w-2/5 px-6 py-3 text-left text-xs font-medium capitalize text-zinc-400">
                     Pay
                   </th>
                 </tr>
