@@ -136,7 +136,7 @@ export const ItemForm = () => {
             <PayersInput index={index} />
 
             <button
-              className="h-12 rounded-md border border-transparent px-1 text-white transition-all hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+              className="h-12 rounded-md border border-transparent px-1 text-white transition-all hover:border-red-500 saturate-[75%] focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
               type="button"
               onClick={() => remove(index)}
             >
