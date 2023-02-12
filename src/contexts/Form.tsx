@@ -5,6 +5,8 @@ import type { Item } from "@models/item";
 
 export const FormProvider: FC<PropsWithChildren> = ({ children }) => {
   const methods = useForm<Item>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     defaultValues: {
       cut: [
         {
