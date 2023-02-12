@@ -4,15 +4,15 @@ import { useFormContext } from "react-hook-form";
 import { components, MultiValue } from "react-select";
 import CreatableSelect from "react-select/creatable";
 
-import PersonAvatar from "@components/PersonAvatar";
-import { usePeople } from "../contexts/PeopleContext";
+import { PersonAvatar } from "@components";
+import { usePeople } from "@contexts/PeopleContext";
 
 import type { KeyboardEventHandler } from "react";
 import type { ControlProps, GroupBase, MultiValueProps } from "react-select";
 import type { Item } from "@models/item";
 import type { Option } from "@models/option";
 
-const MultiValue = ({ children, ...props }: MultiValueProps<Option>) => {
+const MultiValue = (props: MultiValueProps<Option>) => {
   return (
     <components.MultiValue {...props}>
       <div className="relative flex h-full items-center pl-8 pr-2">

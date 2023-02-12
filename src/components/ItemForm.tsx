@@ -3,7 +3,7 @@ import Select, { components } from "react-select";
 import { Plus, Trash2 } from "react-feather";
 import clx from "classnames";
 
-import PersonAvatar from "@components/PersonAvatar";
+import { PersonAvatar } from "@components";
 
 import type { ControlProps, GroupBase, ValueContainerProps } from "react-select";
 import type { FC } from "react";
@@ -82,7 +82,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
 };
 
 export const ItemForm = () => {
-  const { control, handleSubmit, register, formState: {errors} } = useFormContext<Item>();
+  const { control, handleSubmit, register, formState: { errors } } = useFormContext<Item>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -103,17 +103,18 @@ export const ItemForm = () => {
                   type="text"
                   inputMode="decimal"
                   className={classNames(`h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium  focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`, {
-                    'border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ':!(errors?.cut?.[index]?.price?.message),
+                    'border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ': !(errors?.cut?.[index]?.price?.message),
                     'border-red-500 focus:border-red-600': (errors?.cut?.[index]?.price?.message)
                   })}
                   placeholder="0.00"
                   {...register(`cut.${index}.price`, {
-                    validate (v) {
-                      if(typeof v === 'undefined' || isNaN(v)) return 'Invalid number'
+                    validate(v) {
+                      if (typeof v === 'undefined' || isNaN(v)) return 'Invalid number'
                       return true
                     },
                     setValueAs(value) {
-                      return Number((value as string)?.replaceAll(',','.'))
+                      if (typeof value === 'number') return value;
+                      return Number((value as string)?.replaceAll(',', '.'))
                     },
                   })}
                 />

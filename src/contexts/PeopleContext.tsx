@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { usePeopleLocalStorage } from "@hooks/usePeopleLocalStorage";
+import { useLocalStorage } from "@hooks/useLocalStorage";
 
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from "react";
 import type { Option } from "@models/option";
@@ -10,16 +10,16 @@ const PeopleContext = createContext<{
 }>({
   people: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setPeople: () => {},
+  setPeople: () => { },
 });
 
 export const usePeople = () => useContext(PeopleContext);
 
 export const PeopleProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { people, setPeople } = usePeopleLocalStorage();
+  const { data, setData } = useLocalStorage<Option[]>('people');
 
   return (
-    <PeopleContext.Provider value={{ people, setPeople }}>
+    <PeopleContext.Provider value={{ people: data, setPeople: setData }}>
       {children}
     </PeopleContext.Provider>
   );

@@ -6,9 +6,15 @@ import { ItemForm, PeopleInput, ThemeSwitch, TableResults } from "@components/in
 import { FormProvider } from "@contexts/Form";
 import { PeopleProvider } from "@contexts/PeopleContext";
 import { useTheme } from "@contexts/ThemeContext";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   const { theme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
     <div className={clx({ dark: theme === "dark" })}>
@@ -38,11 +44,13 @@ const Home: NextPage = () => {
             <ThemeSwitch />
           </div>
           <PeopleProvider>
-            <FormProvider>
-              <PeopleInput />
-              <ItemForm />
-              <TableResults />
-            </FormProvider>
+            {isMounted &&
+              <FormProvider>
+                <PeopleInput />
+                <ItemForm />
+                <TableResults />
+              </FormProvider>
+            }
           </PeopleProvider>
         </div>
       </main>
