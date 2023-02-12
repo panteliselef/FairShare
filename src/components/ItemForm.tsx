@@ -11,6 +11,7 @@ import type { Item } from "@models/item";
 import type { Option } from "@models/option";
 import { usePeople } from "@contexts/PeopleContext";
 import { useCurrency } from "@hooks/useCurrency";
+import classNames from "classnames";
 
 const ValueContainer = ({ children, ...props }: ValueContainerProps<Option>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -81,7 +82,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
 };
 
 export const ItemForm = () => {
-  const { control, handleSubmit, register } = useFormContext<Item>();
+  const { control, handleSubmit, register, formState: {errors} } = useFormContext<Item>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -99,13 +100,21 @@ export const ItemForm = () => {
               <label className="mb-2 block text-sm font-medium dark:text-white">Price</label>
               <div className="relative">
                 <input
-                  type="number"
-                  pattern="\d*"
+                  type="text"
                   inputMode="decimal"
-                  className="h-12 w-full rounded-md border border-gray-200 px-4 pr-8 text-sm font-medium focus:border-black focus:outline-none focus:ring-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white focus:dark:border-white focus:dark:ring-white"
+                  className={classNames(`h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium  focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`, {
+                    'border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ':!(errors?.cut?.[index]?.price?.message),
+                    'border-red-500 focus:border-red-600': (errors?.cut?.[index]?.price?.message)
+                  })}
                   placeholder="0.00"
                   {...register(`cut.${index}.price`, {
-                    valueAsNumber: true,
+                    validate (v) {
+                      if(typeof v === 'undefined' || isNaN(v)) return 'Invalid number'
+                      return true
+                    },
+                    setValueAs(value) {
+                      return Number((value as string)?.replaceAll(',','.'))
+                    },
                   })}
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center pr-4">
