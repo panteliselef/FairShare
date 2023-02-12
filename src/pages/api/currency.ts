@@ -9,9 +9,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const timezone = ct.getTimezone(_timezone);
     const country = timezone?.countries[0];
+
+    if (!country) return res.status(400).json({ message: "Could not match country with timezone" });
+
     const currency = countryToCurrency[country as keyof typeof countryToCurrency];
 
-    return res.status(200).json({ currency });
+    res.status(200).json({ currency });
   } else {
     res.status(403).json({ message: "Forbidden Method" });
   }

@@ -42,7 +42,9 @@ export const useCurrency = () => {
           setCurrency(currency);
         }
       })
-      .catch((e) => console.error(e))
+      .catch((e) => {
+        if(process.env.NODE_ENV !== 'production') console.error(e);
+      })
       .finally(() => (fetching[timezone] = false));
 
     return () => {
