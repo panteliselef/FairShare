@@ -5,7 +5,7 @@ import clx from "classnames";
 
 import { PersonAvatar } from "@components";
 
-import type { ControlProps, GroupBase, ValueContainerProps } from "react-select";
+import type { ControlProps, GroupBase, ValueContainerProps, MenuListProps } from "react-select";
 import type { FC } from "react";
 import type { Item } from "@models/item";
 import type { Option } from "@models/option";
@@ -31,6 +31,33 @@ const ValueContainer = ({ children, ...props }: ValueContainerProps<Option>) => 
   );
 };
 
+const MenuList = ({ children, ...props }: MenuListProps<Option>) => {
+  const diff = props.options.length - props.getValue().length;
+  const showSelectAll = diff > 1;
+
+  return (
+    <components.MenuList {...props}>
+      <div
+        className={clx(
+          { "pb-2": !showSelectAll },
+          "mt-2 overflow-hidden rounded-md border border-gray-100 bg-white pt-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+        )}
+      >
+        {children}
+        {showSelectAll && (
+          <button
+            type="button"
+            onClick={() => props.setValue(props.options as Option[], "select-option")}
+            className="mt-2 w-full bg-gray-100 py-2 dark:bg-zinc-800 dark:text-white"
+          >
+            Select all
+          </button>
+        )}
+      </div>
+    </components.MenuList>
+  );
+};
+
 const PayersInput: FC<{ index: number }> = ({ index }) => {
   const { people } = usePeople();
   const { control } = useFormContext<Item>();
@@ -53,6 +80,7 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
         name="colors"
         components={{
           ValueContainer,
+          MenuList,
         }}
         value={(value || []) as Option[]}
         options={people}
@@ -70,10 +98,6 @@ const PayersInput: FC<{ index: number }> = ({ index }) => {
           clearIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
           dropdownIndicator: () => clx("px-2 cursor-pointer hover:opacity-75"),
           indicatorSeparator: () => clx("bg-gray-200 dark:bg-zinc-700"),
-          menuList: () =>
-            clx(
-              "mt-2 border border-gray-100 bg-white overflow-hidden rounded-md py-2 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
-            ),
           option: () => clx("py-1 px-3 hover:bg-gray-100 hover:dark:bg-zinc-800 focus:dark:bg-zinc-800"),
         }}
       />
