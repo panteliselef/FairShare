@@ -2,19 +2,21 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import clx from "classnames";
 
-import { ItemForm, PeopleInput, ThemeSwitch, TableResults } from "@components/index";
+import { ItemForm, PeopleInput, ThemeSwitch, TableResults } from "@components";
 import { FormProvider } from "@contexts/Form";
 import { PeopleProvider } from "@contexts/PeopleContext";
 import { useTheme } from "@contexts/ThemeContext";
 import { useEffect, useState } from "react";
+import Script from "next/script";
 
+const NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
 const Home: NextPage = () => {
   const { theme } = useTheme();
-  const [isMounted, setIsMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className={clx({ dark: theme === "dark" })}>
@@ -32,6 +34,18 @@ const Home: NextPage = () => {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
+      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ''}`} />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ''}');`,
+        }}
+      />
       <main className="flex min-h-screen flex-col items-center bg-white dark:bg-black">
         <div className="container flex max-w-2xl flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex w-full items-center justify-between">
@@ -44,13 +58,13 @@ const Home: NextPage = () => {
             <ThemeSwitch />
           </div>
           <PeopleProvider>
-            {isMounted &&
+            {isMounted && (
               <FormProvider>
                 <PeopleInput />
                 <ItemForm />
                 <TableResults />
               </FormProvider>
-            }
+            )}
           </PeopleProvider>
         </div>
       </main>
