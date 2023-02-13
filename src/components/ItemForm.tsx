@@ -101,14 +101,18 @@ export const ItemForm = () => {
       <ul className="flex flex-col gap-4">
         {fields.map((item, index) => (
           <li key={item.id} className="flex h-full items-end gap-3">
+            <span className="inline-flex h-12 items-center text-sm font-semibold text-zinc-400 dark:text-zinc-600">
+              {index + 1}
+            </span>
             <div className="w-full basis-3/12">
               <label className="mb-2 block text-sm font-medium dark:text-white">Price</label>
               <div className="relative">
                 <input
                   type="text"
+                  autoComplete="off"
                   inputMode="decimal"
                   className={classNames(
-                    `h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium  focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`,
+                    `h-12 w-full rounded-md border px-4 pr-8 text-sm font-medium focus:outline-none focus:ring-black dark:bg-zinc-900 dark:text-white focus:dark:ring-white`,
                     {
                       "border-gray-200 focus:border-black dark:border-zinc-700 focus:dark:border-white ":
                         !errors?.cut?.[index]?.price?.message,
@@ -136,7 +140,7 @@ export const ItemForm = () => {
             <PayersInput index={index} />
 
             <button
-              className="h-12 rounded-md border border-transparent px-1 text-white transition-all hover:border-red-500 saturate-[75%] focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+              className="h-12 rounded-md border border-transparent px-1 text-white saturate-[75%] transition-all hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
               type="button"
               onClick={() => remove(index)}
             >
@@ -153,7 +157,7 @@ export const ItemForm = () => {
             `inline-flex grow items-center justify-center gap-2 rounded-md py-2 px-3 transition-all lg:grow-0`,
             `text-sm font-medium`,
             `border border-black bg-black text-white hover:bg-white hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white`,
-            `focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 dark:focus:ring-white`,
+            `focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:dark:ring-white focus:dark:ring-offset-black`,
           ])}
           onClick={() => append({ price: undefined, people: [] })}
         >
