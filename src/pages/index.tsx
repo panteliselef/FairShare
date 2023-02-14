@@ -34,18 +34,20 @@ const Home: NextPage = () => {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ''}`} />
       <Script
-        id="google-analytics"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+        src={`https://www.googletagmanager.com/gtag/js?id=${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ""}`}
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ''}');`,
-        }}
-      />
+            gtag('config', '${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ""}', {
+                page_path: window.location.pathname,
+            });
+            `}
+      </Script>
       <main className="flex min-h-screen flex-col items-center bg-white dark:bg-black">
         <div className="container flex max-w-2xl flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex w-full items-center justify-between">
