@@ -42,7 +42,7 @@ export const TableResults = () => {
     <div className="flex w-full flex-col">
       <div className="-m-1.5 overflow-x-auto">
         <div className="inline-block min-w-full p-1.5 align-middle">
-          <div className="overflow-hidden rounded-lg border shadow dark:border-zinc-700 dark:shadow-zinc-900">
+          <div className="overflow-hidden rounded-lg border dark:border-zinc-700">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
               <thead>
                 <tr className="divide-x divide-gray-200 dark:divide-zinc-700 dark:bg-zinc-900">
