@@ -28,7 +28,7 @@
   border-radius: 50%;
   left: 10%;
   bottom: 15%;
-  box-shadow: inset 8px -4px 0px 0px #fff000;
+  box-shadow: inset 8px -4px 0 0 #fff000;
   background: none;
   transition: all 0.3s ease-out;
 }
@@ -42,5 +42,5 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(100%);
-  box-shadow: inset 15px -4px 0px 15px #fff000;
+  box-shadow: inset 15px -4px 0 15px #fff000;
 }
