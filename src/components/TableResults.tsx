@@ -58,6 +58,7 @@ export const TableResults = () => {
                 {Object.entries(peopleMap).map(([k, v]) => (
                   <PersonRow key={k} name={k} price={v} />
                 ))}
+                <TotalPay />
               </tbody>
             </table>
           </div>
@@ -74,6 +75,23 @@ const PersonRow = ({ name, price }: { name: string; price: number }) => {
     <tr>
       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200">{name}</td>
       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{fmtPrice}</td>
+    </tr>
+  );
+};
+
+const TotalPay = () => {
+  const values = useWatch<Item>();
+
+  const totalPriceMemo = useMemo(() => {
+    return values?.cut?.reduce((acc, item) => acc + (item?.people?.length ? item?.price || 0 : 0), 0) || 0;
+  }, [values]);
+
+  const totalPrice = useWithCurrency(totalPriceMemo);
+
+  return (
+    <tr>
+      <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-gray-800 dark:text-gray-200">Total</td>
+      <td className="whitespace-nowrap px-6 py-4 text-lg font-medium text-gray-800 dark:text-gray-200">{totalPrice}</td>
     </tr>
   );
 };
