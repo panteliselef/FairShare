@@ -103,13 +103,11 @@ export const PeopleInput = () => {
               "grow border bg-white dark:bg-zinc-900 text-sm font-medium p-2 rounded-md dark:text-white"
             ),
           multiValue: () => clx(`flex gap-1 overflow-y-hidden rounded bg-gray-200 dark:bg-black h-7 pr-1.5`),
-
           valueContainer: () => clx("flex gap-2"),
-          indicatorsContainer: () => clx("p-2 text-zinc-900 dark:text-gray-200 cursor-pointer hover:opacity-75"),
         }}
         components={_components}
         inputValue={inputValue}
-        isClearable
+        isClearable={false}
         isMulti
         menuIsOpen={false}
         onChange={onChange}
